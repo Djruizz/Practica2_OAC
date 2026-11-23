@@ -1,4 +1,5 @@
 #include "ripes_system.h"
+#include <stdlib.h>
 
 #define PIXEL_SIZE 2
 #define DELTATIME  1000
@@ -59,16 +60,17 @@ int placeApple(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
                int snakeRow[MATRIX_WIDTH * MATRIX_HEIGHT],
                int snakeColumn[MATRIX_WIDTH * MATRIX_HEIGHT],
                int snakeLength) {
-    for (int row = 0; row < MATRIX_HEIGHT; row++) {
-        for (int column = 0; column < MATRIX_WIDTH; column++) {
-            if (gameMatrix[row][column] == EMPTY &&
-                !isSnakeCell(snakeRow, snakeColumn, snakeLength, row, column)) {
-                gameMatrix[row][column] = APPLE;
-                return 1;
-            }
-        }
-    }
-    return 0;
+    int row;
+    int column;
+
+    do {
+        row = rand() % MATRIX_HEIGHT;
+        column = rand() % MATRIX_WIDTH;
+    } while (gameMatrix[row][column] != EMPTY ||
+             isSnakeCell(snakeRow, snakeColumn, snakeLength, row, column));
+
+    gameMatrix[row][column] = APPLE;
+    return 1;
 }
 
 void initGameMatrix(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
@@ -93,7 +95,8 @@ void initGameMatrix(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
         gameMatrix[snakeRow[i]][snakeColumn[i]] = SNAKE;
     }
 
-    gameMatrix[7][7] = APPLE;
+    srand(*switches);
+    placeApple(gameMatrix, snakeRow, snakeColumn, *snakeLength);
 }
 
 int moveSnake(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
