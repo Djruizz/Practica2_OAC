@@ -1,10 +1,9 @@
 #include "ripes_system.h"
 
 #define PIXEL_SIZE 2
-#define DELTATIME  10000
+#define DELTATIME  1000
 #define MATRIX_WIDTH  (LED_MATRIX_0_WIDTH / PIXEL_SIZE)
 #define MATRIX_HEIGHT (LED_MATRIX_0_HEIGHT / PIXEL_SIZE)
-#define SNAKE_LENGTH 5
 
 #define EMPTY 0
 #define SNAKE 1
@@ -43,8 +42,8 @@ void waitTime(void) {
     for (volatile int i = 0; i < DELTATIME; i++);
 }
 
-int isSnakeCell(int snakeRow[SNAKE_LENGTH],
-                int snakeColumn[SNAKE_LENGTH],
+int isSnakeCell(int snakeRow[MATRIX_WIDTH * MATRIX_HEIGHT],
+                int snakeColumn[MATRIX_WIDTH * MATRIX_HEIGHT],
                 int snakeLength,
                 int row,
                 int column) {
@@ -57,8 +56,8 @@ int isSnakeCell(int snakeRow[SNAKE_LENGTH],
 }
 
 int placeApple(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
-               int snakeRow[SNAKE_LENGTH],
-               int snakeColumn[SNAKE_LENGTH],
+               int snakeRow[MATRIX_WIDTH * MATRIX_HEIGHT],
+               int snakeColumn[MATRIX_WIDTH * MATRIX_HEIGHT],
                int snakeLength) {
     for (int row = 0; row < MATRIX_HEIGHT; row++) {
         for (int column = 0; column < MATRIX_WIDTH; column++) {
@@ -73,8 +72,8 @@ int placeApple(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
 }
 
 void initGameMatrix(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
-                    int snakeRow[SNAKE_LENGTH],
-                    int snakeColumn[SNAKE_LENGTH],
+                    int snakeRow[MATRIX_WIDTH * MATRIX_HEIGHT],
+                    int snakeColumn[MATRIX_WIDTH * MATRIX_HEIGHT],
                     int *snakeLength) {
     for (int row = 0; row < MATRIX_HEIGHT; row++) {
         for (int column = 0; column < MATRIX_WIDTH; column++) {
@@ -98,8 +97,8 @@ void initGameMatrix(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
 }
 
 int moveSnake(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
-              int snakeRow[SNAKE_LENGTH],
-              int snakeColumn[SNAKE_LENGTH],
+              int snakeRow[MATRIX_WIDTH * MATRIX_HEIGHT],
+              int snakeColumn[MATRIX_WIDTH * MATRIX_HEIGHT],
               int *snakeLength,
               int direction) {
     int nextRow = snakeRow[0];
@@ -124,7 +123,7 @@ int moveSnake(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
         return 0;
     }
 
-    if (!ateApple || *snakeLength == SNAKE_LENGTH) {
+    if (!ateApple) {
         gameMatrix[snakeRow[*snakeLength - 1]][snakeColumn[*snakeLength - 1]] = EMPTY;
     } else {
         (*snakeLength)++;
@@ -166,8 +165,8 @@ void refreshScreen(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH]) {
 
 int main(void) {
     int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH];
-    int snakeRow[SNAKE_LENGTH];
-    int snakeColumn[SNAKE_LENGTH];
+    int snakeRow[MATRIX_WIDTH * MATRIX_HEIGHT];
+    int snakeColumn[MATRIX_WIDTH * MATRIX_HEIGHT];
     int snakeLength;
 
     initGameMatrix(gameMatrix, snakeRow, snakeColumn, &snakeLength);
