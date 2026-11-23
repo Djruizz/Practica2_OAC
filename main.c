@@ -83,13 +83,10 @@ void initGameMatrix(int gameMatrix[MATRIX_HEIGHT][MATRIX_WIDTH],
         }
     }
 
-    *snakeLength = 3;
+    *snakeLength = 1;
     snakeRow[0] = 5;
     snakeColumn[0] = 5;
-    snakeRow[1] = 5;
-    snakeColumn[1] = 4;
-    snakeRow[2] = 5;
-    snakeColumn[2] = 3;
+   
 
     for (int i = 0; i < *snakeLength; i++) {
         gameMatrix[snakeRow[i]][snakeColumn[i]] = SNAKE;
