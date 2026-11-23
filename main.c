@@ -172,20 +172,28 @@ int main(void) {
     int snakeColumn[MATRIX_WIDTH * MATRIX_HEIGHT];
     int snakeLength;
 
-    initGameMatrix(gameMatrix, snakeRow, snakeColumn, &snakeLength);
+    while (1) {
+        initGameMatrix(gameMatrix, snakeRow, snakeColumn, &snakeLength);
 
-    int direction = 1;
-    refreshScreen(gameMatrix);
-
-    while (*switches & 1) {
-        direction = currentDirection(direction);
-        if (!moveSnake(gameMatrix, snakeRow, snakeColumn, &snakeLength, direction)) {
-            break;
-        }
+        int direction = 1;
         refreshScreen(gameMatrix);
-        waitTime();
-    }
 
-    offPixel(led_base);
-    return 0;
+        while (*switches & 1) {
+            direction = currentDirection(direction);
+            if (!moveSnake(gameMatrix, snakeRow, snakeColumn, &snakeLength, direction)) {
+                break;
+            }
+            refreshScreen(gameMatrix);
+            waitTime();
+        }
+
+        offPixel(led_base);
+
+        while (*switches & 1) {
+            waitTime();
+        }
+        while (!(*switches & 1)) {
+            waitTime();
+        }
+    }
 }
